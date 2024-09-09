@@ -1,0 +1,10 @@
+prefix=/Users/moshoodbello/Coding/JustCoding/zig/bonk/.zig-cache/i/1ed660dfaf49bd050f1523b10ab11c3e
+includedir=${prefix}/include
+libdir=${prefix}/lib
+
+Name: libxev
+URL: https://github.com/mitchellh/libxev
+Description: High-performance, cross-platform event loop
+Version: 0.1.0
+Cflags: -I${includedir}
+Libs: -L${libdir} -lxev
