@@ -1,4 +1,4 @@
 /libvaxis/
-/zig-out/
+/zig-out/**
 /.zig-cache/
 
