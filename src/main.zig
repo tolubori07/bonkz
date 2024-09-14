@@ -89,7 +89,7 @@ const App = struct {
             \\╚═════╝  ╚═════╝ ╚═╝  ╚═══╝╚═╝  ╚═╝╚═╝╚═╝
         ;
 
-        const instruction = "Welcome to bonk!! \nType in the packages you would like to install(seperate by space)";
+        const instruction = "Welcome to bonk!! Type in the packages you would like to install(seperate by space)";
 
         const win = self.vx.window();
         win.clear();
@@ -107,7 +107,7 @@ const App = struct {
         });
 
         const instruction_child = win.child(.{
-            .x_off = win.width / 2 - 20,
+            .x_off = win.width / 2 - 40,
             .y_off = win.height / 4, // Position greeting at the top
             .width = .{ .limit = greeting.len },
             .height = .{ .limit = 6 }, // Adjust the height based on the size of the greeting
@@ -139,6 +139,11 @@ const App = struct {
             .key_press => |key| {
                 if (key.matches('c', .{ .ctrl = true })) {
                     self.should_quit = true;
+                } else if (key.matches(vaxis.Key.enter, .{})) {
+                    var buffer: [256]u8 = undefined;
+                    const current_input = self.text_input.sliceToCursor(&buffer);
+                    const argv: []const []const u8 = &[_][]const u8{ "Bun", "add", current_input };
+                    _ = try std.process.Child.run(.{ .argv = argv, .allocator = self.allocator });
                 } else {
                     try self.text_input.update(.{ .key_press = key }); // Use self.text_input here
                 }
