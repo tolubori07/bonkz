@@ -143,7 +143,7 @@ const App = struct {
                     var buffer: [256]u8 = undefined;
                     const current_input = self.text_input.sliceToCursor(&buffer);
                     const argv: []const []const u8 = &[_][]const u8{ "Bun", "add", current_input };
-                    _ = try std.process.Child.run(.{ .argv = argv, .allocator = self.allocator });
+                    try std.process.Child.run(.{ .argv = argv, .allocator = self.allocator });
                 } else {
                     try self.text_input.update(.{ .key_press = key }); // Use self.text_input here
                 }

@@ -4,10 +4,8 @@
 ### zig ###
 # Zig programming language
 libvaxis/
-.zig-cache/
-zig-out/
-build/
-build-*/
+.zig-cache/*
+zig-out/*
 docgen_tmp/
 
 # End of https://www.toptal.com/developers/gitignore/api/zig
