@@ -1,6 +1,7 @@
 const vaxis = @import("vaxis");
 const std = @import("std");
 const TextInput = vaxis.widgets.TextInput;
+const TextView = vaxis.widgets.TextView;
 const border = vaxis.widgets.border;
 
 pub const panic = vaxis.panic_handler;
@@ -37,14 +38,7 @@ const App = struct {
     pub fn init(allocator: std.mem.Allocator) !App {
         var vx = try vaxis.init(allocator, .{});
         const text_input = TextInput.init(allocator, &vx.unicode); // Initialize text_input
-        return .{
-            .allocator = allocator,
-            .should_quit = false,
-            .tty = try vaxis.Tty.init(),
-            .vx = vx,
-            .mouse = null,
-            .text_input = text_input,
-        };
+        return .{ .allocator = allocator, .should_quit = false, .tty = try vaxis.Tty.init(), .vx = vx, .mouse = null, .text_input = text_input };
     }
 
     pub fn deinit(self: *App) void {
@@ -105,6 +99,10 @@ const App = struct {
             .height = .{ .limit = 6 }, // Adjust the height based on the size of the greeting
             .border = .{ .style = style },
         });
+        //const result_child: vaxis.Segment = .{
+        // .text = ,
+        //.style = style,
+        //};
 
         const instruction_child = win.child(.{
             .x_off = win.width / 2 - 40,
@@ -132,6 +130,8 @@ const App = struct {
         // Check for mouse events on the input_child
         // Draw the text input in the input_child window
         self.text_input.draw(input_child);
+        //const center = vaxis.widgets.alignment.center(win, 28, 4);
+        //_ = try center.printSegment(result_child, .{ .wrap = .grapheme });
     }
 
     pub fn update(self: *App, event: Event) !void {
@@ -143,7 +143,9 @@ const App = struct {
                     var buffer: [256]u8 = undefined;
                     const current_input = self.text_input.sliceToCursor(&buffer);
                     const argv: []const []const u8 = &[_][]const u8{ "Bun", "add", current_input };
-                    try std.process.Child.run(.{ .argv = argv, .allocator = self.allocator });
+                    const result = try std.process.Child.run(.{ .argv = argv, .allocator = self.allocator });
+                    defer self.allocator.free(result.stdout);
+                    defer self.allocator.free(result.stderr);
                 } else {
                     try self.text_input.update(.{ .key_press = key }); // Use self.text_input here
                 }
