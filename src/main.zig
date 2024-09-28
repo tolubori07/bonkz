@@ -144,6 +144,7 @@ const App = struct {
                     const current_input = self.text_input.sliceToCursor(&buffer);
                     const argv: []const []const u8 = &[_][]const u8{ "Bun", "add", current_input };
                     const result = try std.process.Child.run(.{ .argv = argv, .allocator = self.allocator });
+                    self.should_quit = true;
                     defer self.allocator.free(result.stdout);
                     defer self.allocator.free(result.stderr);
                 } else {
